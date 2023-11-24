@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # This installs Nginx on my web-01 server using Homebrew
 brew install nginx
 
