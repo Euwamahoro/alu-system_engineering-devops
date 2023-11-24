@@ -6,10 +6,7 @@ brew install nginx
 sudo mkdir -p /usr/local/var/www/html
 
 # Create the HTML file
-echo "Holberton School for the win!" | sudo tee /usr/local/var/www/html/index.html > /dev/null
+sudo bash -c 'echo "Holberton School" > /usr/local/var/www/html/index.html'
 
 # Start Nginx service
 brew services start nginx
-
-# Confirm Nginx is listening on port 80
-lsof -i :80
