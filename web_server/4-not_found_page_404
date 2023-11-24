@@ -3,13 +3,13 @@
 brew install nginx
 
 # Create necessary directories
-sudo mkdir -p /usr/share/nginx/html
+sudo mkdir -p /usr/local/var/www/html
 
 # Create the custom 404 page with the required string
-echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee /usr/local/var/www/html/404.html > /dev/null
 
 # Configure Nginx to use the custom 404 page
-sudo bash -c 'echo "error_page 404 /404.html;" > /usr/local/etc/nginx/nginx.conf'
+sudo bash -c 'echo "error_page 404 /404.html;\nlocation = /404.html {\n    root /usr/local/var/www/html;\n    internal;\n}" > /usr/local/etc/nginx/nginx.conf'
 
 # Start Nginx service
 brew services start nginx
