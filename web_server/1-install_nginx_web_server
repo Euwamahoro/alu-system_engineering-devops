@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 # This installs Nginx on my web-01 server using Homebrew
+
+nginx_path=$(brew --prefix nginx)
 brew install nginx
 
 # Create necessary directories
-sudo mkdir -p /usr/local/var/www/html
+sudo mkdir -p "$nginx_path/html"
 
 # Create the HTML file
-sudo bash -c 'echo "Holberton School" > /usr/local/var/www/html/index.html'
+sudo bash -c 'echo "Holberton School" > "$nginx_path/html/index.html"'
 
 # Start Nginx service
 brew services start nginx
