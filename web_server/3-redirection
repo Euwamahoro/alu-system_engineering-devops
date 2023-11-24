@@ -1,21 +1,41 @@
 #!/usr/bin/env bash
-# add a 301 redirection
-sudo apt update -y
-sudo apt install nginx -y
 
-sudo mkdir /etc/nginx/html
-sudo touch /etc/nginx/html/index.html
-echo "Holberton School" > /etc/nginx/html/index.html
-printf %s "server {
-     listen	 80 default_server;
-     listen	 [::]:80 default_server;
-     root	 /etc/nginx/html;
-     index	 index.html index.htm;
+# Install Nginx using Homebrew
+brew install nginx
 
-     location /redirect_me {
-	return 301 https://www.youtube.com/watch?v=QH2-TGU1wu4;
-     }
-}
-" > /etc/nginx/sites-available/default
+# Create necessary directories
+sudo mkdir -p /usr/local/var/www/html
 
-sudo service nginx restart
+# Create the HTML file
+sudo bash -c 'echo "Holberton School" > /usr/local/var/www/html/index.html'
+
+# Create a new HTML file for redirection
+sudo bash -c 'echo "<html><head><meta http-equiv=\"refresh\" content=\"0;url=https://www.youtube.com/watch?v=QH2-TGUlwu4\" /></head></html>" > /usr/local/var/www/html/redirect_me.html'
+
+# Configure Nginx for redirection
+sudo bash -c 'echo "server {
+    listen 80;
+    server_name localhost;
+
+    location /redirect_me {
+        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
+    }
+
+    location / {
+        root /usr/local/var/www/html;
+        index index.html;
+    }
+}" > /usr/local/etc/nginx/nginx.conf'
+
+# Start Nginx service
+brew services start nginx
+
+# Wait for Nginx to start (adjust sleep time as needed)
+sleep 3
+
+# Confirm Nginx is listening on port 80
+lsof -i :80
+
+# Query the server and print the HTTP response code
+response_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/redirect_me)
+echo "HTTP response code: $response_code"
