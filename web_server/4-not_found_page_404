@@ -1,43 +1,15 @@
 #!/usr/bin/env bash
-# Configure your Nginx server to have a custom 404 page that contains the string Ceci n'est pas une page;
+# Install Nginx using Homebrew
+brew install nginx
 
-apt-get update
-apt-get install -y nginx
+# Create necessary directories
+sudo mkdir -p /usr/share/nginx/html
 
-mkdir /etc/nginx/html
+# Create the custom 404 page with the required string
+echo "Ceci n'est pas une page" | sudo tee /usr/share/nginx/html/404.html > /dev/null
 
-touch /etc/nginx/html/index.html
+# Configure Nginx to use the custom 404 page
+sudo bash -c 'echo "error_page 404 /404.html;" > /usr/local/etc/nginx/nginx.conf'
 
-
-echo "Holberton School" > /etc/nginx/html/index.html
-echo "Ceci n'est pas une page" > /etc/nginx/html/404.html
-
-
-# Create custom 404 error page
-echo "<!DOCTYPE html>
-<html>
-<head>
-  <title>404 Not Found</title>
-</head>
-<body>
-  <h1>404 Not Found</h1>
-  <p>Ceci n'est pas une page</p>
-</body>
-</html>" | sudo tee /var/www/html/404.html >/dev/nullservice nginx restart
-
-printf %s "server {
-     listen      80 default_server;
-     listen      [::]:80 default_server;
-     root        /etc/nginx/html;
-     index       index.html index.htm;
-     location /redirect_me{
-        return 301 http://youtube.com/;
-     }
-     error_page 404 /404.html;
-     location /404 {
-        root /etc/nginx/html;
-        internal;
-     }
-}
-" > /etc/nginx/sites-available/default
-service nginx restart
+# Start Nginx service
+brew services start nginx
