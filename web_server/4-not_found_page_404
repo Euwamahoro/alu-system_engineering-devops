@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Create necessary directories
 mkdir -p /etc/nginx/html
 
