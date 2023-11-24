@@ -1,26 +1,42 @@
-#!/usr/bin/env bash
+#!/bin/bash
+# Update Homebrew and install Nginx
+brew update
+brew install nginx
+
 # Create necessary directories
-mkdir -p /etc/nginx/html
+sudo mkdir -p /usr/local/var/www
 
 # Create the custom 404 page with the required string
-echo "Ceci n'est pas une page" | sudo tee /etc/nginx/html/404.html > /dev/null
+echo '
+<!DOCTYPE html>
+<html>
+<head>
+    <title>404 Not Found</title>
+</head>
+<body>
+    <h1>404 Not Found</h1>
+    <p>Ceci n'"'"'est pas une page</p>
+</body>
+</html>
+' | sudo tee /usr/local/var/www/404.html > /dev/null
 
 # Update the Nginx configuration to use the custom 404 page
-echo "
+echo '
 server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
-    root /etc/nginx/html;
-    index index.html index.htm;
-    location /redirect_me {
-        return 301 http://youtube.com/;
+    listen       8080;
+    server_name  localhost;
+
+    location / {
+        root   /usr/local/var/www;
+        index  index.html index.htm;
     }
+
     error_page 404 /404.html;
     location = /404.html {
         internal;
     }
 }
-" > /etc/nginx/sites-available/default
+' | sudo tee /usr/local/etc/nginx/nginx.conf > /dev/null
 
-# Restart Nginx service
-service nginx restart
+# Start Nginx service
+brew services start nginx
