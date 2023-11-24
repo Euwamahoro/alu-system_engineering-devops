@@ -1,20 +1,22 @@
 #!/usr/bin/env bash
-# Update the package list and install nginx with -y option
-sudo apt-get update
-sudo apt-get install nginx -y
+# Install Nginx using Homebrew
+brew install nginx
 
 # Create necessary directories
-sudo mkdir -p /var/www/html
+sudo mkdir -p /usr/local/var/www/html
 
 # Create the HTML file
-echo "Holberton School for the win!" | sudo tee /var/www/html/index.html > /dev/null
+sudo bash -c 'echo "Holberton School for the win!" > /usr/local/var/www/html/index.html'
 
-# Restart Nginx service without using systemctl
-sudo /etc/init.d/nginx restart
+# Start Nginx service
+brew services start nginx
+
+# Wait for Nginx to start (adjust sleep time as needed)
+sleep 3
 
 # Confirm Nginx is listening on port 80
-sudo lsof -i :80
+lsof -i :80
 
-# Query the server and print the HTTP response
-response=$(curl -s http://localhost)
-echo "$response"
+# Query the server and print the HTTP response code
+response_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost)
+echo "HTTP response code: $response_code"
