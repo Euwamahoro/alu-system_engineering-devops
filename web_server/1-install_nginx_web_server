@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Update the package list and install nginx with -y option
 sudo apt-get update
 sudo apt-get install nginx -y
