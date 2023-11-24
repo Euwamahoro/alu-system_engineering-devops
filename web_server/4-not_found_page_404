@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Update Homebrew and install Nginx
 brew update
 brew install nginx
