@@ -1,11 +1,1 @@
-#!/usr/bin/env bash
-
-# Domain name provided by .TECH Domains
-nazaa.tech="holbertonschool.tech"
-
-# Update DNS records with an A entry pointing to your web-01 IP address
-# This change may take some time to propagate (~1-2 hours)
-echo "54.92.217.36 $domain_name" | sudo tee -a /etc/hosts > /dev/null
-
-# Display the configured DNS records
-dig $domain_name
+nazaa.tech
