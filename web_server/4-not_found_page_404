@@ -1,7 +1,4 @@
 #!/usr/bin/env bash
-# Update the package list and install nginx with -y option
-apt-get update
-apt-get install -y nginx
 
 # Create necessary directories
 mkdir -p /etc/nginx/html
@@ -9,8 +6,9 @@ mkdir -p /etc/nginx/html
 # Create the custom 404 page with the required string
 echo "Ceci n'est pas une page" | sudo tee /etc/nginx/html/404.html > /dev/null
 
-# Create a default configuration with the custom 404 page
-echo "server {
+# Update the Nginx configuration to use the custom 404 page
+echo "
+server {
     listen 80 default_server;
     listen [::]:80 default_server;
     root /etc/nginx/html;
@@ -22,7 +20,8 @@ echo "server {
     location = /404.html {
         internal;
     }
-}" > /etc/nginx/sites-available/default
+}
+" > /etc/nginx/sites-available/default
 
 # Restart Nginx service
 service nginx restart
