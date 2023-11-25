@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
-#This installs Nginx on my web-01 server
-sudo apt-get update
-sudo apt-get install nginx -y
-sudo mkdir /var/www/html
-sudo touch /var/www/html/index.html
-sudo echo "Holberton School" > /var/www/html/index.html
-sudo service nginx start
+# Update Homebrew
+brew update
+
+# Install Nginx
+brew install nginx
+
+# Create directory for HTML files
+sudo mkdir /usr/local/var/www/html
+
+# Create index.html file with content
+echo "Holberton School" | sudo tee /usr/local/var/www/html/index.html > /dev/null
+
+# Start Nginx service
+brew services start nginx
+
+# Ensure Nginx is listening on port 80
+sudo lsof -i :80
