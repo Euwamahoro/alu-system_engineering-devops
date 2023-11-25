@@ -1,8 +1,18 @@
 #!/usr/bin/env bash
 # installs nginx and configures it on a remote server
 
-apt-get -y update
-apt-get -y install nginx
-ufw allow 'Nginx HTTP'
-echo 'Hello World!' > /var/www/html/index.nginx-debian.html
-service nginx start
+# Update Homebrew
+brew update
+
+# Install Nginx
+brew install nginx
+
+# Allow Nginx through the firewall using pfctl
+sudo pfctl -e
+echo "pass in proto tcp from any to any port 80" | sudo pfctl -f -
+
+# Create a simple index page
+echo 'Hello World!' > /usr/local/var/www/index.html
+
+# Start Nginx
+brew services start nginx
