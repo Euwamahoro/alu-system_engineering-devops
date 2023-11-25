@@ -10,18 +10,7 @@ sudo mkdir -p /usr/local/var/www
 echo "Holberton School" | sudo tee /usr/local/var/www/index.html > /dev/null
 
 # Create the 404.html file with the required string
-echo "
-<!DOCTYPE html>
-<html>
-<head>
-    <title>404 Not Found</title>
-</head>
-<body>
-    <h1>404 Not Found</h1>
-    <p>Ceci n'est pas une page</p>
-</body>
-</html>
-" | sudo tee /usr/local/etc/nginx/html/404.html > /dev/null
+echo "Ceci n'est pas une page" | sudo tee /usr/local/etc/nginx/html/404.html > /dev/null
 
 # Configure Nginx server
 echo "
