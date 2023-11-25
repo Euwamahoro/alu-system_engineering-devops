@@ -1,11 +1,12 @@
 #!/usr/bin/env bash
-# Update the package list and install nginx with -y option
-apt-get update
-apt-get install -y nginx
+# Update Homebrew
+brew update
+
+# Install Nginx if not already installed
+brew install nginx
 
 # Configure Nginx to have a custom 404 page
-sudo sed -i 's/# server_names_hash_bucket_size/server_names_hash_bucket_size/' /etc/nginx/nginx.conf
-sudo sed -i '/server {/a \    error_page 404 /404.html;\n    location = /404.html {\n        root /usr/share/nginx/html;\n        internal;\n    }' /etc/nginx/sites-available/default
+sudo sed -i '' '/http {/a \    error_page 404 /404.html;\n    location = /404.html {\n        root html;\n        internal;\n    }' /usr/local/etc/nginx/nginx.conf
 
 # Create a custom 404 HTML page with the required string
 echo "
@@ -18,7 +19,7 @@ echo "
     <h1>Ceci n'est pas une page</h1>
 </body>
 </html>
-" | sudo tee /usr/share/nginx/html/404.html > /dev/null
+" | sudo tee /usr/local/var/www/404.html > /dev/null
 
 # Restart Nginx service
-service nginx restart
+brew services restart nginx
