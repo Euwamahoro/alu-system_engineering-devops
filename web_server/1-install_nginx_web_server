@@ -1,15 +1,26 @@
 #!/usr/bin/env bash
-# This installs Nginx on an Ubuntu machine
 
 # Update the package list
 sudo apt-get update
 
-# Install Nginx
+# Install nginx
 sudo apt-get install -y nginx
 
-# Create the HTML directory and file
-sudo mkdir -p /var/www/html
+# Ensure that nginx is listening on port 80
+sudo sed -i 's/\blisten 8080\b/listen 80 default_server/g' /etc/nginx/sites-available/default
+
+# Reload nginx to apply the changes
+sudo /etc/init.d/nginx reload
+
+# Create an HTML file with the required content
 echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Start Nginx
-sudo systemctl start nginx
+# Check if Nginx is serving the page correctly using curl
+response=$(curl -s http://127.0.0.1)
+
+# Check if the response contains "Holberton School"
+if [[ $response == *"Holberton School"* ]]; then
+    echo "Nginx configured successfully. Test passed!"
+else
+    echo "Something went wrong. Check Nginx logs for more information."
+fi
