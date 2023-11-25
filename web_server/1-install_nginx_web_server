@@ -1,18 +1,15 @@
 #!/usr/bin/env bash
-# installs nginx and configures it on a remote server
-
-# Update Homebrew
-brew update
-
-# Install Nginx
+# Install Nginx using brew
 brew install nginx
 
-# Allow Nginx through the firewall using pfctl
-sudo pfctl -e
-echo "pass in proto tcp from any to any port 80" | sudo pfctl -f -
-
-# Create a simple index page
-echo 'Hello World!' > /usr/local/var/www/index.html
+# Create a custom index page
+echo "Holberton School for the win!" > /usr/local/var/www/index.html
 
 # Start Nginx
 brew services start nginx
+
+# Sleep to ensure Nginx has started
+sleep 2
+
+# Test Nginx by querying the root with curl
+curl localhost

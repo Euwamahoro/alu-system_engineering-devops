@@ -1,40 +1,30 @@
 #!/usr/bin/env bash
-# Install Nginx using Homebrew
-brew install nginx
+# Installs, configures, and starts the server
+apt-get update
+apt-get -y install nginx
+sudo ufw allow 'Nginx HTTP'
+mkdir -p /var/www/html/
+sudo chmod -R 755 /var/www
+echo 'Hello World!' > /var/www/html/index.html
+SERVER_CONFIG=\
+"server {
+	listen 80 default_server;
+	listen [::]:80 default_server;
+	root /var/www/html;
+	index index.html index.htm index.nginx-debian.html;
+	server_name _;
+	location / {
+		try_files \$uri \$uri/ =404;
+	}
+	if (\$request_filename ~ redirect_me){
+		rewrite ^ https://sketchfab.com/bluepeno/models permanent;
+	}
+}"
 
-# Create necessary directories
-sudo mkdir -p /usr/local/var/www/html
+bash -c "echo -e '$SERVER_CONFIG' > /etc/nginx/sites-enabled/default"
 
-# Create the HTML file
-sudo bash -c 'echo "Holberton School" > /usr/local/var/www/html/index.html'
-
-# Create a new HTML file for redirection
-sudo bash -c 'echo "<html><head><meta http-equiv=\"refresh\" content=\"0;url=https://www.youtube.com/watch?v=QH2-TGUlwu4\" /></head></html>" > /usr/local/var/www/html/redirect_me.html'
-
-# Configure Nginx for redirection
-sudo bash -c 'echo "server {
-    listen 80;
-    server_name localhost;
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-
-    location / {
-        root /usr/local/var/www/html;
-        index index.html;
-    }
-}" > /usr/local/etc/nginx/nginx.conf'
-
-# Start Nginx service
-brew services start nginx
-
-# Wait for Nginx to start (adjust sleep time as needed)
-sleep 3
-
-# Confirm Nginx is listening on port 80
-lsof -i :80
-
-# Query the server and print the HTTP response code
-response_code=$(curl -s -o /dev/null -w "%{http_code}" http://localhost/redirect_me)
-echo "HTTP response code: $response_code"
+if [ "$(pgrep -c nginx)" -le 0 ]; then
+	service nginx start
+else
+	service nginx restart
+fi
