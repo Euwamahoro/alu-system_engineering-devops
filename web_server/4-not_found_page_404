@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Install Nginx using Homebrew
 brew install nginx
 
