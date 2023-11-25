@@ -1,21 +1,15 @@
 #!/usr/bin/env bash
-# This installs Nginx on my web-01 server
+# This installs Nginx on an Ubuntu machine
 
-# Check if brew is installed, install if not
-if ! command -v brew &> /dev/null; then
-    echo "Homebrew is not installed. Installing..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-fi
-
-# Update Homebrew
-brew update
+# Update the package list
+sudo apt-get update
 
 # Install Nginx
-brew install nginx
+sudo apt-get install -y nginx
 
 # Create the HTML directory and file
-sudo mkdir -p /usr/local/var/www/html
-echo "Holberton School" | sudo tee /usr/local/var/www/html/index.html
+sudo mkdir -p /var/www/html
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
 # Start Nginx
-brew services start nginx
+sudo systemctl start nginx
