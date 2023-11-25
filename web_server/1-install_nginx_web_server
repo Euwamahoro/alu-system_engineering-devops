@@ -1,18 +1,25 @@
 #!/usr/bin/env bash
-# Update Homebrew
-brew update
+# Update the package list
+sudo apt-get update
 
-# Install Nginx
-brew install nginx
+# Install nginx
+sudo apt-get install -y nginx
 
-# Create directory for HTML files
-sudo mkdir /usr/local/var/www/html
+# Ensure that nginx is listening on port 80
+sudo sed -i 's/\blisten 80\b/listen 80 default_server/g' /etc/nginx/sites-available/default
 
-# Create index.html file with content
-echo "Holberton School" | sudo tee /usr/local/var/www/html/index.html > /dev/null
+# Reload nginx to apply the changes
+sudo /etc/init.d/nginx reload
 
-# Start Nginx service
-brew services start nginx
+# Create an HTML file with the required content
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Ensure Nginx is listening on port 80
-sudo lsof -i :80
+# Check if Nginx is serving the page correctly using curl
+response=$(curl -s http://127.0.0.1)
+
+# Check if the response contains "Holberton School"
+if [[ $response == *"Holberton School"* ]]; then
+    echo "Nginx configured successfully. Test passed!"
+else
+    echo "Something went wrong. Check Nginx logs for more information."
+fi
