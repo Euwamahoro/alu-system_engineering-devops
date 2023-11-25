@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-
+#this script is trying to complete task 4 in web_server project
 # Colors
 blue='\e[1;34m'
 brown='\e[0;33m'
