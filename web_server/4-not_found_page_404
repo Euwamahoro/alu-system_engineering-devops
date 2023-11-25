@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
-# Configure Nginx to have a custom 404 page
-sudo sed -i '' '/http {/a \    error_page 404 /404.html;\n    location = /404.html {\n        root html;\n        internal;\n    }' /etc/nginx/nginx.conf
 
-# Create a custom 404 HTML page with the required string
+# Install Nginx using Homebrew
+brew install nginx
+
+# Create the required directories
+sudo mkdir -p /usr/local/etc/nginx/html
+sudo mkdir -p /usr/local/var/www
+
+# Create the index.html file
+echo "Holberton School" | sudo tee /usr/local/var/www/index.html > /dev/null
+
+# Create the 404.html file with the required string
 echo "
 <!DOCTYPE html>
 <html>
@@ -10,10 +18,31 @@ echo "
     <title>404 Not Found</title>
 </head>
 <body>
-    <h1>Ceci n'est pas une page</h1>
+    <h1>404 Not Found</h1>
+    <p>Ceci n'est pas une page</p>
 </body>
 </html>
-" | sudo tee /usr/share/nginx/html/404.html > /dev/null
+" | sudo tee /usr/local/etc/nginx/html/404.html > /dev/null
 
-# Restart Nginx service
-sudo service nginx restart
+# Configure Nginx server
+echo "
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /usr/local/var/www;
+    index index.html index.htm;
+
+    location /redirect_me {
+        return 301 http://youtube.com/;
+    }
+
+    error_page 404 /404.html;
+    location /404 {
+        root /usr/local/etc/nginx/html;
+        internal;
+    }
+}
+" | sudo tee /usr/local/etc/nginx/nginx.conf > /dev/null
+
+# Start Nginx service
+brew services start nginx
