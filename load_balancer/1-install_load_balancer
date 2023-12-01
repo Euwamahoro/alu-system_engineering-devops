@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 i#!/usr/bin/env bash
+=======
+#!/usr/bin/env bash
+>>>>>>> a1d795d9f4f481130922bb4456695863a02e240d
 # Install and configure HAproxy on your lb-01 server.
 # Make sure that HAproxy can be managed via an init script
 sudo apt-get -y update
